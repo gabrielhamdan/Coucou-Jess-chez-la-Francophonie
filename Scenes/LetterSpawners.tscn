@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scripts/SpawningPos.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Spawners.gd" type="Script" id=2]
+
+
+[node name="LetterSpawners" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="SpawningPos" type="Position2D" parent="." groups=[
+"spawnPos",
+]]
+script = ExtResource( 1 )
+[connection signal="spawnPoint" from="." to="SpawningPos" method="_on_Spawners_spawnPoint"]

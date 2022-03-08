@@ -1,0 +1,59 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Scripts/Blur.gd" type="Script" id=1]
+[ext_resource path="res://Graphics/crackingSpriteSheets.png" type="Texture" id=2]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 320, 192 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 2 )
+region = Rect2( 320, 0, 320, 192 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 640, 0, 320, 192 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ) ],
+"loop": true,
+"name": "crackings",
+"speed": 5.0
+} ]
+
+[sub_resource type="Shader" id=5]
+code = "shader_type canvas_item;
+
+uniform float blur : hint_range(0, 3) = 0.0;
+
+void fragment() {
+	vec4 color = texture(SCREEN_TEXTURE, SCREEN_UV, blur);
+	COLOR = color;
+}"
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = SubResource( 5 )
+shader_param/blur = 0.0
+
+[sub_resource type="StreamTexture" id=7]
+load_path = "res://.import/background.png-9eb38ed9bd704821e0fed87c555d283f.stex"
+
+[node name="Glasses" type="CanvasLayer"]
+
+[node name="Crackings" type="AnimatedSprite" parent="."]
+visible = false
+frames = SubResource( 4 )
+animation = "crackings"
+
+[node name="Blur" type="TextureRect" parent="."]
+material = SubResource( 6 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = SubResource( 7 )
+expand = true
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

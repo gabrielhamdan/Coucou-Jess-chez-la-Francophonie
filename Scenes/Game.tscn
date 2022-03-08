@@ -1,0 +1,409 @@
+[gd_scene load_steps=29 format=2]
+
+[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scripts/SpawningPos.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/Floor.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scripts/Game.gd" type="Script" id=4]
+[ext_resource path="res://Graphics/background.png" type="Texture" id=5]
+[ext_resource path="res://Scripts/Spawners.gd" type="Script" id=6]
+[ext_resource path="res://Scripts/ItemSpawnPos.gd" type="Script" id=7]
+[ext_resource path="res://Scripts/ItemSpawner.gd" type="Script" id=8]
+[ext_resource path="res://Scripts/Blur.gd" type="Script" id=9]
+[ext_resource path="res://Graphics/crackingSpriteSheets.png" type="Texture" id=10]
+[ext_resource path="res://Sound/GlassCrack.wav" type="AudioStream" id=11]
+[ext_resource path="res://Sound/SUCCESS PICKUP Collect Chime 01.wav" type="AudioStream" id=12]
+[ext_resource path="res://Sound/pepSound4.ogg" type="AudioStream" id=13]
+[ext_resource path="res://Sound/Catwalk.wav" type="AudioStream" id=14]
+[ext_resource path="res://Sound/coin_SFX.wav" type="AudioStream" id=15]
+[ext_resource path="res://Sound/Level Up 2 (miniclip).wav" type="AudioStream" id=16]
+[ext_resource path="res://Sound/Effects D.wav" type="AudioStream" id=17]
+[ext_resource path="res://Scenes/Blob.tscn" type="PackedScene" id=18]
+[ext_resource path="res://Graphics/timerEmptyTexture.png" type="Texture" id=19]
+[ext_resource path="res://Graphics/timerFullTexture.png" type="Texture" id=20]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform float blur : hint_range(0, 3) = 0.0;
+
+void fragment() {
+	vec4 color = texture(SCREEN_TEXTURE, SCREEN_UV, blur);
+	COLOR = color;
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/blur = 0.0
+
+[sub_resource type="StreamTexture" id=3]
+load_path = "res://.import/background.png-9eb38ed9bd704821e0fed87c555d283f.stex"
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 10 )
+region = Rect2( 0, 0, 320, 192 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 10 )
+region = Rect2( 320, 0, 320, 192 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 10 )
+region = Rect2( 640, 0, 320, 192 )
+
+[sub_resource type="SpriteFrames" id=7]
+animations = [ {
+"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"loop": true,
+"name": "crackings",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 10, 288 )
+
+[node name="Game" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.3, 0.3 )
+motion_mirroring = Vector2( 320, 191 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+scale = Vector2( 2, 2 )
+texture = ExtResource( 5 )
+
+[node name="Floor" parent="." instance=ExtResource( 3 )]
+tile_data = PoolIntArray( -720854, 0, 0, -655318, 0, 0, -524307, 0, 0, -524306, 0, 0, -524305, 0, 0, -524304, 0, 0, -524303, 0, 0, -524302, 0, 0, -524301, 0, 0, -524300, 0, 0, -524299, 0, 0, -524298, 0, 0, -524297, 0, 0, -524296, 0, 0, -524295, 0, 0, -524294, 0, 0, -524293, 0, 0, -524292, 0, 0, -524291, 0, 0, -524290, 0, 0, -524289, 0, 0, -589824, 0, 0, -589817, 0, 0, -589816, 0, 0, -589815, 0, 0, -589814, 0, 0, -589813, 0, 0, -589812, 0, 0, -589811, 0, 0, -589810, 0, 0, -589809, 0, 0, -589808, 0, 0, -589807, 0, 0, -589806, 0, 0, -589805, 0, 0, -589804, 0, 0, -589803, 0, 0, -589802, 0, 0, -589801, 0, 0, -589800, 0, 0, -589799, 0, 0, -589798, 0, 0, -589797, 0, 0, -589796, 0, 0, -589795, 0, 0, -589794, 0, 0, -589793, 0, 0, -589792, 0, 0, -589791, 0, 0, -589782, 0, 0, -458771, 0, 0, -524246, 0, 0, -393235, 0, 0, -458710, 0, 0, -327699, 0, 0, -393174, 0, 0, -262163, 0, 0, -327638, 0, 0, -196627, 0, 0, -262102, 0, 0, -131091, 0, 0, -131090, 0, 0, -131089, 0, 0, -131088, 0, 0, -131087, 0, 0, -131086, 0, 0, -131085, 0, 0, -131084, 0, 0, -131083, 0, 0, -131082, 0, 0, -131081, 0, 0, -131080, 0, 0, -131079, 0, 0, -131078, 0, 0, -131077, 0, 0, -131076, 0, 0, -131075, 0, 0, -131074, 0, 0, -131073, 0, 0, -196608, 0, 0, -196601, 0, 0, -196600, 0, 0, -196599, 0, 0, -196598, 0, 0, -196597, 0, 0, -196596, 0, 0, -196595, 0, 0, -196594, 0, 0, -196593, 0, 0, -196592, 0, 0, -196591, 0, 0, -196590, 0, 0, -196589, 0, 0, -196588, 0, 0, -196587, 0, 0, -196586, 0, 0, -196585, 0, 0, -196584, 0, 0, -196583, 0, 0, -196582, 0, 0, -196581, 0, 0, -196580, 0, 0, -196579, 0, 0, -196578, 0, 0, -196577, 0, 0, -196576, 0, 0, -196575, 0, 0, -196566, 0, 0, -65555, 0, 0, -131030, 0, 0, -19, 0, 0, -65494, 0, 0, 65517, 0, 0, 42, 0, 0, 131053, 0, 0, 65578, 0, 0, 196589, 0, 0, 196590, 0, 0, 196591, 0, 0, 196592, 0, 0, 196593, 0, 0, 196594, 0, 0, 196595, 0, 0, 196596, 0, 0, 196597, 0, 0, 196598, 0, 0, 196599, 0, 0, 196600, 0, 0, 196601, 0, 0, 196602, 0, 0, 196603, 0, 0, 196604, 0, 0, 196605, 0, 0, 196606, 0, 0, 196607, 0, 0, 131072, 0, 0, 131073, 0, 0, 131074, 0, 0, 131075, 0, 0, 131076, 0, 0, 131077, 0, 0, 131078, 0, 0, 131079, 0, 0, 131080, 0, 0, 131081, 0, 0, 131082, 0, 0, 131083, 0, 0, 131084, 0, 0, 131085, 0, 0, 131086, 0, 0, 131087, 0, 0, 131088, 0, 0, 131089, 0, 0, 131090, 0, 0, 131091, 0, 0, 131092, 0, 0, 131093, 0, 0, 131094, 0, 0, 131095, 0, 0, 131096, 0, 0, 131097, 0, 0, 131098, 0, 0, 131099, 0, 0, 131100, 0, 0, 131101, 0, 0, 131102, 0, 0, 131103, 0, 0, 131104, 0, 0, 131105, 0, 0, 131106, 0, 0, 131107, 0, 0, 131108, 0, 0, 131109, 0, 0, 131110, 0, 0, 131111, 0, 0, 131112, 0, 0, 131113, 0, 0, 131114, 0, 0 )
+
+[node name="Spawners" type="Node2D" parent="."]
+script = ExtResource( 6 )
+
+[node name="SpawningPos" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( -256, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos2" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( -192, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos3" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( -128, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos4" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( -64, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos5" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 64, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos6" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 128, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos7" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 192, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos8" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 256, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos9" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 320, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos10" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 384, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos11" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 448, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos12" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 512, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos13" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 576, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos14" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 640, -16 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos15" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 640, -128 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos16" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 576, -128 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos17" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 512, -208 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos18" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 640, -208 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos19" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 576, -208 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos20" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 448, -208 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos21" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 384, -208 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos22" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 320, -208 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos23" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 256, -208 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos24" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 192, -208 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos25" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 128, -208 )
+script = ExtResource( 2 )
+
+[node name="SpawningPos26" type="Position2D" parent="Spawners" groups=[
+"spawnPos",
+]]
+position = Vector2( 0, -208 )
+script = ExtResource( 2 )
+
+[node name="Glasses" type="CanvasLayer" parent="."]
+
+[node name="Blur" type="TextureRect" parent="Glasses"]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = SubResource( 3 )
+expand = true
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Crack" type="AudioStreamPlayer" parent="Glasses"]
+stream = ExtResource( 11 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Crackings" type="AnimatedSprite" parent="CanvasLayer"]
+visible = false
+frames = SubResource( 7 )
+animation = "crackings"
+centered = false
+
+[node name="Palavra" type="Label" parent="CanvasLayer"]
+margin_right = 75.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+text = "placeholder"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Display" type="Label" parent="CanvasLayer"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -14.0
+margin_right = 75.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+text = "placeholder"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Input" type="Label" parent="CanvasLayer"]
+anchor_left = 0.382813
+anchor_top = 0.280483
+anchor_right = 0.617188
+anchor_bottom = 0.358261
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+text = "placeholder"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Win" type="Label" parent="CanvasLayer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -160.375
+margin_top = -90.0
+margin_right = 159.625
+margin_bottom = 90.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+text = "placeholder"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TimerCount" type="TextureProgress" parent="CanvasLayer"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -15.0
+margin_top = 5.0
+margin_right = 15.0
+margin_bottom = 34.0
+max_value = 60.0
+step = 0.1
+texture_under = ExtResource( 20 )
+texture_progress = ExtResource( 19 )
+fill_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CanvasLayer/TimerCount"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "60"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2( 696, -208 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource( 8 )
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+position = Vector2( -312, -232 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D2"]
+shape = SubResource( 8 )
+
+[node name="ItemSpawner" type="Node2D" parent="."]
+script = ExtResource( 8 )
+
+[node name="ItemSpawnPos" type="Position2D" parent="ItemSpawner"]
+position = Vector2( -144, -104 )
+script = ExtResource( 7 )
+
+[node name="ItemSpawnPos2" type="Position2D" parent="ItemSpawner"]
+position = Vector2( -144, -208 )
+script = ExtResource( 7 )
+
+[node name="ItemSpawnPos3" type="Position2D" parent="ItemSpawner"]
+position = Vector2( 360, -96 )
+script = ExtResource( 7 )
+
+[node name="SFX" type="Node" parent="."]
+
+[node name="CorrectLetter" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource( 12 )
+
+[node name="WrongLetter" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource( 13 )
+
+[node name="Background" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource( 14 )
+autoplay = true
+
+[node name="ItemUp" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource( 15 )
+
+[node name="GameOver" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource( 17 )
+volume_db = 5.0
+
+[node name="Win" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource( 16 )
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 223.622, -67.7984 )
+
+[node name="Blob" parent="." instance=ExtResource( 18 )]
+position = Vector2( 118.5, -62.75 )
+[connection signal="spawnPoint" from="Spawners" to="Spawners/SpawningPos" method="_on_Spawners_spawnPoint"]
+[connection signal="GlassesSpawnPoint" from="ItemSpawner" to="ItemSpawner/ItemSpawnPos" method="_on_ItemSpawner_GlassesSpawnPoint"]
+[connection signal="TimerSpawnPoint" from="ItemSpawner" to="ItemSpawner/ItemSpawnPos" method="_on_ItemSpawner_TimerSpawnPoint"]
+[connection signal="NewGlasses" from="Player" to="Glasses/Blur" method="_on_Player_NewGlasses"]
+[connection signal="incrementBlur" from="Player" to="Glasses/Blur" method="_on_Player_incrementBlur"]
