@@ -12,7 +12,7 @@ Coucou Jess is an educational game intended for both vocabulary building aimed a
 ### How it plays
 
 The core mechanic, that is how the player is able to complete their compendium, is very close to a hangman game, but instead of typing in a guess, players will move around each location, jumping and avoiding enemies, and hit letter blocks they think match their guesses.
-<br>[Here](https://gabrielhamdan.github.io/Coucou-Jess/#game) you can check a very simple preview running on JavaScript.
+<br><a target="_blank" href="https://gabrielhamdan.github.io/Coucou-Jess/#game">Here</a> you can check a very simple preview running on JavaScript.
 
 <br>Besides enemies, players will also have to deal with limited time to to complete each word.
 
